@@ -6,12 +6,14 @@ import {enableScreens} from 'react-native-screens';
 import {IconSymbol, type IconName} from '../components/IconSymbol';
 import {AtelierScreen} from '../screens/AtelierScreen';
 import {ContextScreen} from '../screens/ContextScreen';
+import {HomeScreen} from '../screens/HomeScreen';
 import {SettingsScreen} from '../screens/SettingsScreen';
 import {SocialScreen} from '../screens/SocialScreen';
 import {useAppTheme} from '../theme/ThemeProvider';
 import {spacing, typography} from '../theme/theme';
 
 type RootTabParamList = {
+  Home: undefined;
   Context: undefined;
   Atelier: undefined;
   Social: undefined;
@@ -23,6 +25,7 @@ const Tab = createBottomTabNavigator<RootTabParamList>();
 enableScreens(false);
 
 const tabConfig = {
+  Home: {icon: 'home', label: 'Home'},
   Context: {icon: 'context', label: 'Context'},
   Atelier: {icon: 'atelier', label: 'Atelier'},
   Social: {icon: 'social', label: 'Social'},
@@ -76,6 +79,12 @@ const contextOptions = {
   ),
 };
 
+const homeOptions = {
+  tabBarIcon: ({focused}: {focused: boolean}) => (
+    <TabIcon routeName="Home" focused={focused} />
+  ),
+};
+
 const atelierOptions = {
   tabBarIcon: ({focused}: {focused: boolean}) => (
     <TabIcon routeName="Atelier" focused={focused} />
@@ -112,7 +121,7 @@ export function AppNavigator() {
   return (
     <NavigationContainer theme={navigationTheme}>
       <Tab.Navigator
-        initialRouteName="Context"
+        initialRouteName="Home"
         screenOptions={{
           ...commonScreenOptions,
           headerShown: false,
@@ -123,6 +132,11 @@ export function AppNavigator() {
           tabBarItemStyle: styles.tabItem,
           tabBarShowLabel: false,
         }}>
+        <Tab.Screen
+          name="Home"
+          component={HomeScreen}
+          options={homeOptions}
+        />
         <Tab.Screen
           name="Context"
           component={ContextScreen}
@@ -158,7 +172,7 @@ const styles = StyleSheet.create({
     height: 60,
   },
   tabContent: {
-    width: 84,
+    width: 68,
     height: 58,
     alignItems: 'center',
     justifyContent: 'center',

@@ -19,10 +19,14 @@ const iconMap = {
   import: '＋',
   magic: '✦',
   check: '✓',
+  home: '⌂',
   moon: '☾',
   sun: '☀',
   image: '▨',
   text: 'T',
+  sticker: '◰',
+  gif: 'GIF',
+  background: '▥',
 } as const;
 
 export type IconName = keyof typeof iconMap;
