@@ -92,15 +92,31 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            if (project.hasProperty('MEMEAI_UPLOAD_STORE_FILE')) {
+                storeFile file(MEMEAI_UPLOAD_STORE_FILE)
+                storePassword MEMEAI_UPLOAD_STORE_PASSWORD
+                keyAlias MEMEAI_UPLOAD_KEY_ALIAS
+                keyPassword MEMEAI_UPLOAD_KEY_PASSWORD
+            } else if (System.getenv('MEMEAI_UPLOAD_STORE_FILE')) {
+                storeFile file(System.getenv('MEMEAI_UPLOAD_STORE_FILE'))
+                storePassword System.getenv('MEMEAI_UPLOAD_STORE_PASSWORD')
+                keyAlias System.getenv('MEMEAI_UPLOAD_KEY_ALIAS')
+                keyPassword System.getenv('MEMEAI_UPLOAD_KEY_PASSWORD')
+            } else {
+                storeFile file('debug.keystore')
+                storePassword 'android'
+                keyAlias 'androiddebugkey'
+                keyPassword 'android'
+            }
+        }
     }
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
         }
         release {
-            // Caution! In production, you need to generate your own keystore file.
-            // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }

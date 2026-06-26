@@ -10,118 +10,10 @@ import LinearGradient from 'react-native-linear-gradient';
 import {Badge} from '../components/Badge';
 import {IconSymbol} from '../components/IconSymbol';
 import {ScreenHeader} from '../components/ScreenHeader';
+import {memePackages} from '../data/memePackages';
 import {useAppTheme} from '../theme/ThemeProvider';
-import {colors as baseColors, rainbow, spacing, typography} from '../theme/theme';
-
-type MemePreviewItem = {
-  id: string;
-  title: string;
-  caption: string;
-  palette: string[];
-};
-
-type MemePackage = {
-  id: string;
-  title: string;
-  subtitle: string;
-  memes: MemePreviewItem[];
-};
-
-const packages: MemePackage[] = [
-  {
-    id: 'reaction',
-    title: 'Réactions rapides',
-    subtitle: 'Réponses prêtes pour discussions et statuts',
-    memes: [
-      {
-        id: 'reaction-1',
-        title: 'No way',
-        caption: 'Quand le groupe découvre enfin la vérité',
-        palette: [baseColors.danger, baseColors.orange],
-      },
-      {
-        id: 'reaction-2',
-        title: 'Silence',
-        caption: 'Moi après avoir envoyé le mauvais vocal',
-        palette: [baseColors.blue, baseColors.violet],
-      },
-      {
-        id: 'reaction-3',
-        title: 'Regard',
-        caption: 'La preuve était dans le screenshot',
-        palette: [baseColors.success, baseColors.info],
-      },
-      {
-        id: 'reaction-4',
-        title: 'Drama',
-        caption: 'Personne n’a demandé mais tout le monde suit',
-        palette: [baseColors.pink, baseColors.warning],
-      },
-    ],
-  },
-  {
-    id: 'school',
-    title: 'Campus',
-    subtitle: 'Cours, deadlines, exposés et travaux de groupe',
-    memes: [
-      {
-        id: 'school-1',
-        title: 'Deadline',
-        caption: 'Quand le devoir sort la veille',
-        palette: [baseColors.warning, baseColors.danger],
-      },
-      {
-        id: 'school-2',
-        title: 'Exposé',
-        caption: 'Le membre absent devient expert le jour J',
-        palette: [baseColors.info, baseColors.blue],
-      },
-      {
-        id: 'school-3',
-        title: 'Notes',
-        caption: 'Le barème avait ses propres projets',
-        palette: [baseColors.violet, baseColors.pink],
-      },
-      {
-        id: 'school-4',
-        title: 'Groupe',
-        caption: 'Travail de groupe, effort individuel',
-        palette: [baseColors.success, baseColors.warning],
-      },
-    ],
-  },
-  {
-    id: 'whatsapp',
-    title: 'WhatsApp Status',
-    subtitle: 'Formats carrés faciles à partager',
-    memes: [
-      {
-        id: 'whatsapp-1',
-        title: 'Vu',
-        caption: 'Vu à 14:03, réponse prévue en 2029',
-        palette: rainbow,
-      },
-      {
-        id: 'whatsapp-2',
-        title: 'Statut',
-        caption: 'Ce statut ne vise personne officiellement',
-        palette: [baseColors.success, baseColors.blue],
-      },
-      {
-        id: 'whatsapp-3',
-        title: 'Famille',
-        caption: 'Quand tata découvre les stickers',
-        palette: [baseColors.orange, baseColors.pink],
-      },
-      {
-        id: 'whatsapp-4',
-        title: 'Online',
-        caption: 'En ligne mais émotionnellement absent',
-        palette: [baseColors.info, baseColors.violet],
-      },
-    ],
-  },
-];
+import {spacing, typography} from '../theme/theme';
+import type {MemePackage, MemePreviewItem} from '../types/meme';
 
 export function HomeScreen() {
   const {colors} = useAppTheme();
@@ -170,7 +62,7 @@ export function HomeScreen() {
         subtitle="Découvre des packages de mèmes prêts à adapter"
       />
       <ScrollView contentContainerStyle={styles.content}>
-        {packages.map(pkg => (
+        {memePackages.map(pkg => (
           <View key={pkg.id} style={styles.packageSection}>
             <View style={styles.sectionHeader}>
               <View style={styles.sectionCopy}>

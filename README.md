@@ -44,6 +44,15 @@ Verifier le projet :
 npm run verify
 ```
 
+Lancer le backend en mode developpement :
+
+```sh
+cd backend
+npm install
+cp .env.example .env
+npm run dev
+```
+
 Preparer un APK release :
 
 ```sh
@@ -59,3 +68,19 @@ android/app/build/outputs/apk/release/app-release.apk
 ## Regle de securite IA
 
 La cle IA ne doit jamais etre placee dans le code React Native. Le mobile doit appeler un backend Node/Express, et le backend seul doit lire `GEMINI_API_KEY` depuis un fichier `.env` local non commite.
+
+## Backend local
+
+Par defaut, l'application mobile utilise :
+
+```txt
+http://10.0.2.2:3000
+```
+
+Cette adresse fonctionne pour l'emulateur Android. Sur un telephone physique, remplacer l'URL dans `Settings` par l'adresse IP locale du PC, par exemple :
+
+```txt
+http://192.168.1.20:3000
+```
+
+Le backend fonctionne aussi sans cle Gemini si `ALLOW_MOCK_AI=true`, ce qui permet de faire la demo gratuitement meme si le quota IA est indisponible.

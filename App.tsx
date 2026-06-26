@@ -1,15 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import {StatusBar} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {AppConfigProvider} from './src/config/AppConfigProvider';
 import {AppNavigator} from './src/navigation/AppNavigator';
 import {SplashScreen} from './src/screens/SplashScreen';
 import {ThemeProvider, useAppTheme} from './src/theme/ThemeProvider';
 
 function App() {
   return (
-    <ThemeProvider>
-      <AppShell />
-    </ThemeProvider>
+    <AppConfigProvider>
+      <ThemeProvider>
+        <AppShell />
+      </ThemeProvider>
+    </AppConfigProvider>
   );
 }
 

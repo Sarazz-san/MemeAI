@@ -14,8 +14,11 @@ import {IconSymbol, type IconName} from '../components/IconSymbol';
 import {MemePreview} from '../components/MemePreview';
 import {ScreenHeader} from '../components/ScreenHeader';
 import {TextInputBox} from '../components/TextInputBox';
+import {useAppConfig} from '../config/AppConfigProvider';
+import {generateMemeFromText} from '../services/api';
 import {useAppTheme} from '../theme/ThemeProvider';
 import {rainbow, spacing, typography} from '../theme/theme';
+import type {GeneratedMeme} from '../types/meme';
 
 const MAX_LENGTH = 700;
 
@@ -45,21 +48,22 @@ const inputActions: InputAction[] = [
 
 export function ContextScreen() {
   const {colors} = useAppTheme();
+  const {backendUrl} = useAppConfig();
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
   const [helper, setHelper] = useState(
     'Écris, colle ou importe un contexte. MemeAI préparera un mème dans cette zone.',
   );
-  const [result, setResult] = useState<null | {caption: string; tone: string}>(
-    null,
-  );
+  const [result, setResult] = useState<GeneratedMeme | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   function handleInputAction(action: InputAction) {
     setResult(null);
+    setError(null);
     setHelper(action.helper);
   }
 
-  function generateMeme() {
+  async function generateMeme() {
     if (!text.trim()) {
       setHelper('Ajoute d’abord un texte ou importe un contenu pour créer un mème.');
       return;
@@ -67,16 +71,28 @@ export function ContextScreen() {
 
     setLoading(true);
     setResult(null);
+    setError(null);
     setHelper("L'IA mélange le contexte, le ton et la punchline.");
 
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      const generated = await generateMemeFromText(backendUrl, text.trim());
+      setResult(generated);
+      setHelper('Mème généré depuis le backend.');
+    } catch (apiError) {
+      const message =
+        apiError instanceof Error
+          ? apiError.message
+          : 'Backend indisponible';
+
+      setError(`${message}. Résultat local temporaire affiché.`);
       setResult({
         caption:
-          'Quand le contexte était déjà drôle, mais que MemeAI décide de finir le travail.',
-        tone: 'Sarcastique',
+          'Quand le backend dort encore, mais que le TP doit avancer quand même.',
+        tone: 'Fallback local',
       });
-    }, 950);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -95,10 +111,11 @@ export function ContextScreen() {
             placeholder="Écris ou colle ton contexte..."
             value={text}
             maxLength={MAX_LENGTH}
-            onChangeText={value => {
-              setText(value);
-              setResult(null);
-            }}
+          onChangeText={value => {
+            setText(value);
+            setResult(null);
+            setError(null);
+          }}
             style={styles.input}
           />
 
@@ -132,7 +149,7 @@ export function ContextScreen() {
             {text.length} / {MAX_LENGTH}
           </Text>
           <Text style={[styles.metaText, {color: colors.textMuted}]}>
-            Imports: texte, audio, image, fichier
+            API: {backendUrl}
           </Text>
         </View>
 
@@ -159,7 +176,14 @@ export function ContextScreen() {
               </View>
             </AppCard>
           ) : result ? (
-            <MemePreview caption={result.caption} tone={result.tone} />
+            <>
+              {error ? (
+                <Text style={[styles.errorText, {color: colors.warning}]}>
+                  {error}
+                </Text>
+              ) : undefined}
+              <MemePreview caption={result.caption} tone={result.tone} />
+            </>
           ) : (
             <AppCard>
               <View style={styles.helpContent}>
@@ -226,6 +250,11 @@ const styles = StyleSheet.create({
   },
   output: {
     marginTop: spacing.xxxl,
+  },
+  errorText: {
+    ...typography.caption,
+    marginBottom: spacing.md,
+    textAlign: 'center',
   },
   helpContent: {
     minHeight: 190,

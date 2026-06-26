@@ -134,8 +134,8 @@ Une tache est terminee seulement si :
 - [x] TypeScript.
 - [x] Bottom tabs.
 - [x] Theme local.
-- [ ] Service API centralise dans `src/services/api.ts`.
-- [ ] Types partages pour les reponses backend.
+- [x] Service API centralise dans `src/services/api.ts`.
+- [x] Types partages pour les reponses backend.
 - [ ] Gestion d'etats `idle/loading/success/error`.
 - [ ] Gestion permissions Android.
 
@@ -156,7 +156,8 @@ src/
 ### 2.2 Backend
 
 - [ ] Creer dossier `backend/`.
-- [ ] Initialiser projet Node gratuit :
+- [x] Creer dossier `backend/`.
+- [x] Initialiser projet Node gratuit :
 
 ```sh
 mkdir backend
@@ -166,13 +167,13 @@ npm install express multer dotenv cors
 npm install --save-dev nodemon
 ```
 
-- [ ] Ajouter `backend/index.js`.
-- [ ] Ajouter `backend/.env.example`.
-- [ ] Ajouter `backend/routes/context.js`.
-- [ ] Ajouter `backend/routes/voice.js`.
-- [ ] Ajouter `backend/routes/remixer.js`.
-- [ ] Ajouter `backend/services/gemini.js`.
-- [ ] Ajouter nettoyage automatique des uploads temporaires.
+- [x] Ajouter `backend/index.js`.
+- [x] Ajouter `backend/.env.example`.
+- [x] Ajouter `backend/routes/context.js`.
+- [x] Ajouter `backend/routes/voice.js`.
+- [x] Ajouter `backend/routes/remixer.js`.
+- [x] Ajouter `backend/services/gemini.js`.
+- [x] Ajouter nettoyage automatique des uploads temporaires.
 
 Endpoints cibles :
 
@@ -204,8 +205,8 @@ GEMINI_API_KEY=replace_me
 
 ### 3.1 Home
 
-- [ ] Creer une source de donnees locale `src/data/memePackages.ts`.
-- [ ] Deplacer les packages mockes hors de `HomeScreen`.
+- [x] Creer une source de donnees locale `src/data/memePackages.ts`.
+- [x] Deplacer les packages mockes hors de `HomeScreen`.
 - [ ] Ajouter categories :
   - [ ] Reactions rapides.
   - [ ] Campus.
@@ -258,8 +259,8 @@ Validation UI :
 
 ### 4.1 Initialisation
 
-- [ ] Creer `backend/package.json`.
-- [ ] Installer uniquement des dependances gratuites/open source.
+- [x] Creer `backend/package.json`.
+- [x] Installer uniquement des dependances gratuites/open source dans le manifeste.
 - [ ] Ajouter script dev :
 
 ```json
@@ -271,7 +272,7 @@ Validation UI :
 }
 ```
 
-- [ ] Ajouter route `/health`.
+- [x] Ajouter route `/health`.
 - [ ] Tester :
 
 ```sh
@@ -280,11 +281,11 @@ curl http://localhost:3000/health
 
 ### 4.2 Route context
 
-- [ ] Recevoir `{ "text": "..." }`.
-- [ ] Valider que `text` n'est pas vide.
-- [ ] Limiter la taille du texte.
-- [ ] Appeler Gemini via le backend.
-- [ ] Retourner :
+- [x] Recevoir `{ "text": "..." }`.
+- [x] Valider que `text` n'est pas vide.
+- [x] Limiter la taille du texte.
+- [x] Appeler Gemini via le backend si la cle est configuree.
+- [x] Retourner :
 
 ```json
 {
@@ -293,7 +294,8 @@ curl http://localhost:3000/health
 }
 ```
 
-- [ ] Gerer erreurs avec status HTTP clair.
+- [x] Gerer erreurs avec status HTTP clair.
+- [x] Retourner un mock gratuit si `ALLOW_MOCK_AI=true`.
 
 ### 4.3 Route voice
 
@@ -327,13 +329,13 @@ curl http://localhost:3000/health
 
 ### 5.1 Service API
 
-- [ ] Creer `src/services/api.ts`.
-- [ ] Configurer `BASE_URL`.
-- [ ] Ajouter `generateFromText(text)`.
+- [x] Creer `src/services/api.ts`.
+- [x] Configurer l'URL backend depuis `Settings`.
+- [x] Ajouter `generateFromText(text)`.
 - [ ] Ajouter `generateFromAudio(file)`.
 - [ ] Ajouter `generateFromImage(file)`.
-- [ ] Centraliser parsing JSON.
-- [ ] Centraliser erreurs reseau.
+- [x] Centraliser parsing JSON.
+- [x] Centraliser erreurs reseau.
 
 ### 5.2 Android local
 
@@ -344,11 +346,11 @@ curl http://localhost:3000/health
 
 ### 5.3 Context branche
 
-- [ ] Remplacer loading mocke par appel `POST /api/context`.
-- [ ] Afficher caption reelle.
-- [ ] Afficher tone reel.
-- [ ] Gerer erreur quota IA.
-- [ ] Gerer backend eteint.
+- [x] Remplacer loading mocke par appel `POST /api/context`.
+- [x] Afficher caption reelle ou fallback local.
+- [x] Afficher tone reel ou fallback local.
+- [x] Gerer erreur quota IA par fallback si backend le permet.
+- [x] Gerer backend eteint cote mobile.
 
 ---
 
@@ -515,9 +517,10 @@ keytool -genkeypair -v -storetype PKCS12 -keystore android/app/memeai-release-ke
 
 ### 10.3 Configuration Gradle
 
-- [ ] Configurer signing release dans `android/app/build.gradle`.
-- [ ] Lire mots de passe depuis `gradle.properties`.
-- [ ] Verifier que `.gitignore` exclut les secrets.
+- [x] Configurer signing release dans `android/app/build.gradle`.
+- [x] Lire mots de passe depuis `gradle.properties` ou variables d'environnement.
+- [x] Verifier que `.gitignore` exclut les secrets.
+- [x] Ajouter `android/gradle.properties.example`.
 
 ### 10.4 Build APK
 
