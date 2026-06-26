@@ -84,3 +84,7 @@ http://192.168.1.20:3000
 ```
 
 Le backend fonctionne aussi sans cle Gemini si `ALLOW_MOCK_AI=true`, ce qui permet de faire la demo gratuitement meme si le quota IA est indisponible.
+
+## Media et permissions
+
+Les permissions Android de base sont deja declarees pour camera, micro et lecture media. Les fonctions API `generateMemeFromAudio` et `generateMemeFromImage` sont pretes cote mobile. Il reste a brancher un picker/camera/audio recorder gratuit et compatible React Native CLI.

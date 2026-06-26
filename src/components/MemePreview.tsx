@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {useAppTheme} from '../theme/ThemeProvider';
 import {rainbow, spacing, typography} from '../theme/theme';
+import {shareMemeText} from '../services/share';
 import {AppCard} from './AppCard';
 import {Badge} from './Badge';
 import {IconSymbol} from './IconSymbol';
@@ -22,6 +23,16 @@ export function MemePreview({
   transcription,
 }: MemePreviewProps) {
   const {colors} = useAppTheme();
+  const [status, setStatus] = useState<string | null>(null);
+
+  async function handleShare() {
+    try {
+      await shareMemeText(caption, tone);
+      setStatus('Partage ouvert.');
+    } catch {
+      setStatus("Impossible d'ouvrir le partage.");
+    }
+  }
 
   return (
     <AppCard result>
@@ -49,14 +60,21 @@ export function MemePreview({
 
       <View style={styles.actions}>
         <SecondaryButton
-          label="Sauvegarder"
+          label="Copier"
+          onPress={() => setStatus('Sauvegarde galerie à brancher après export image.')}
           icon={<IconSymbol name="download" color={colors.text} size={18} />}
         />
         <SecondaryButton
           label="Partager"
+          onPress={handleShare}
           icon={<IconSymbol name="share" color={colors.text} size={18} />}
         />
       </View>
+      {status ? (
+        <Text style={[styles.statusText, {color: colors.textMuted}]}>
+          {status}
+        </Text>
+      ) : undefined}
     </AppCard>
   );
 }
@@ -98,5 +116,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: spacing.md,
     marginTop: spacing.xl,
+  },
+  statusText: {
+    ...typography.caption,
+    textAlign: 'center',
+    marginTop: spacing.md,
   },
 });

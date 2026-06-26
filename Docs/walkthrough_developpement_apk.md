@@ -99,6 +99,9 @@ Une tache est terminee seulement si :
 - [x] Canvas type editeur avec fond quadrille.
 - [x] Panneau d'outils en bas : Add, Text, Emoji, Sticker, GIF Sticker, Background.
 - [x] Panneau ajuste pour ne pas etre masque par la tab bar.
+- [x] Ajout de calques locaux sans dependance externe.
+- [x] Selection et suppression simple de calque.
+- [x] Changement de background mocke.
 - [ ] Ajouter selection d'image de fond.
 - [ ] Ajouter calques texte.
 - [ ] Ajouter deplacement/redimensionnement des calques.
@@ -111,6 +114,7 @@ Une tache est terminee seulement si :
 
 - [x] Hub social visuel.
 - [x] Affiche WhatsApp, Instagram, TikTok, Facebook, X, Telegram.
+- [x] Partage natif gratuit via Android share sheet.
 - [ ] Definir le vrai perimetre : partage sortant seulement ou import entrant aussi.
 - [ ] Brancher partage Android natif.
 - [ ] Ajouter raccourci vers WhatsApp.
@@ -332,8 +336,8 @@ curl http://localhost:3000/health
 - [x] Creer `src/services/api.ts`.
 - [x] Configurer l'URL backend depuis `Settings`.
 - [x] Ajouter `generateFromText(text)`.
-- [ ] Ajouter `generateFromAudio(file)`.
-- [ ] Ajouter `generateFromImage(file)`.
+- [x] Ajouter `generateFromAudio(file)`.
+- [x] Ajouter `generateFromImage(file)`.
 - [x] Centraliser parsing JSON.
 - [x] Centraliser erreurs reseau.
 
@@ -358,20 +362,20 @@ curl http://localhost:3000/health
 
 ### 6.1 Permissions
 
-- [ ] Ajouter permission micro :
+- [x] Ajouter permission micro :
 
 ```xml
 <uses-permission android:name="android.permission.RECORD_AUDIO" />
 ```
 
-- [ ] Ajouter permissions images selon version Android :
+- [x] Ajouter permissions images selon version Android :
 
 ```xml
 <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 ```
 
-- [ ] Eviter `MANAGE_EXTERNAL_STORAGE` sauf justification forte, car c'est sensible.
+- [x] Eviter `MANAGE_EXTERNAL_STORAGE` sauf justification forte, car c'est sensible.
 
 ### 6.2 Camera
 
@@ -439,7 +443,7 @@ curl http://localhost:3000/health
 
 Version gratuite et realiste pour le TP :
 
-- [ ] Partager un meme genere via Android share sheet.
+- [x] Partager un meme genere via Android share sheet.
 - [ ] Proposer raccourcis visuels vers reseaux populaires.
 - [ ] Ne pas integrer APIs officielles payantes/complexes.
 - [ ] Ne pas demander login reseaux sociaux.

@@ -1,8 +1,9 @@
 import React from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {AppCard} from '../components/AppCard';
 import {IconSymbol} from '../components/IconSymbol';
 import {ScreenHeader} from '../components/ScreenHeader';
+import {shareAppIntro} from '../services/share';
 import {useAppTheme} from '../theme/ThemeProvider';
 import {spacing, typography} from '../theme/theme';
 
@@ -41,7 +42,16 @@ export function SocialScreen() {
 
         <View style={styles.networkGrid}>
           {networks.map(network => (
-            <AppCard key={network.name} style={styles.networkCard}>
+            <Pressable
+              key={network.name}
+              accessibilityRole="button"
+              accessibilityLabel={`Partager vers ${network.name}`}
+              onPress={shareAppIntro}
+              style={({pressed}) => [
+                styles.networkPressable,
+                pressed && styles.pressed,
+              ]}>
+              <AppCard style={styles.networkCard}>
               <View style={[styles.networkIcon, {backgroundColor: network.color}]}>
                 <Text style={styles.networkMark}>{network.mark}</Text>
               </View>
@@ -51,7 +61,8 @@ export function SocialScreen() {
               <Text style={[styles.networkHint, {color: colors.textMuted}]}>
                 Partage rapide
               </Text>
-            </AppCard>
+              </AppCard>
+            </Pressable>
           ))}
         </View>
       </ScrollView>
@@ -88,8 +99,10 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: spacing.md,
   },
-  networkCard: {
+  networkPressable: {
     width: '48%',
+  },
+  networkCard: {
     alignItems: 'center',
     gap: spacing.sm,
   },
@@ -112,5 +125,9 @@ const styles = StyleSheet.create({
   networkHint: {
     ...typography.micro,
     textAlign: 'center',
+  },
+  pressed: {
+    opacity: 0.78,
+    transform: [{scale: 0.98}],
   },
 });

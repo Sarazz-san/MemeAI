@@ -26,6 +26,7 @@ type InputAction = {
   icon: IconName;
   label: string;
   helper: string;
+  attachmentLabel: string;
 };
 
 const inputActions: InputAction[] = [
@@ -33,16 +34,19 @@ const inputActions: InputAction[] = [
     icon: 'camera',
     label: 'Caméra',
     helper: 'Capture photo prête à brancher.',
+    attachmentLabel: 'Photo capturée',
   },
   {
     icon: 'mic',
     label: 'Micro',
     helper: 'Enregistrement audio prêt à brancher.',
+    attachmentLabel: 'Note vocale enregistrée',
   },
   {
     icon: 'import',
     label: 'Importer',
     helper: 'Explorateur de fichiers prêt à brancher.',
+    attachmentLabel: 'Fichier importé',
   },
 ];
 
@@ -56,15 +60,17 @@ export function ContextScreen() {
   );
   const [result, setResult] = useState<GeneratedMeme | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [attachment, setAttachment] = useState<InputAction | null>(null);
 
   function handleInputAction(action: InputAction) {
     setResult(null);
     setError(null);
+    setAttachment(action);
     setHelper(action.helper);
   }
 
   async function generateMeme() {
-    if (!text.trim()) {
+    if (!text.trim() && !attachment) {
       setHelper('Ajoute d’abord un texte ou importe un contenu pour créer un mème.');
       return;
     }
@@ -75,7 +81,8 @@ export function ContextScreen() {
     setHelper("L'IA mélange le contexte, le ton et la punchline.");
 
     try {
-      const generated = await generateMemeFromText(backendUrl, text.trim());
+      const contextText = text.trim() || attachment?.attachmentLabel || '';
+      const generated = await generateMemeFromText(backendUrl, contextText);
       setResult(generated);
       setHelper('Mème généré depuis le backend.');
     } catch (apiError) {
@@ -112,10 +119,10 @@ export function ContextScreen() {
             value={text}
             maxLength={MAX_LENGTH}
           onChangeText={value => {
-            setText(value);
-            setResult(null);
-            setError(null);
-          }}
+              setText(value);
+              setResult(null);
+              setError(null);
+            }}
             style={styles.input}
           />
 
@@ -143,6 +150,41 @@ export function ContextScreen() {
             ))}
           </View>
         </View>
+
+        {attachment ? (
+          <View
+            style={[
+              styles.attachmentBar,
+              {backgroundColor: colors.card, borderColor: colors.border},
+            ]}>
+            <View style={styles.attachmentCopy}>
+              <IconSymbol
+                name={attachment.icon}
+                color={colors.info}
+                size={18}
+              />
+              <View style={styles.attachmentTextWrap}>
+                <Text style={[styles.attachmentTitle, {color: colors.text}]}>
+                  {attachment.attachmentLabel}
+                </Text>
+                <Text style={[styles.attachmentText, {color: colors.textMuted}]}>
+                  Simulation UI prête pour branchement natif
+                </Text>
+              </View>
+            </View>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Retirer l'import"
+              onPress={() => setAttachment(null)}
+              style={({pressed}) => [
+                styles.clearAttachment,
+                {backgroundColor: colors.input},
+                pressed && styles.pressed,
+              ]}>
+              <IconSymbol name="close" color={colors.text} size={16} />
+            </Pressable>
+          </View>
+        ) : undefined}
 
         <View style={styles.metaRow}>
           <Text style={[styles.metaText, {color: colors.placeholder}]}>
@@ -244,6 +286,40 @@ const styles = StyleSheet.create({
     gap: spacing.md,
     marginTop: spacing.sm,
     marginBottom: spacing.xxl,
+  },
+  attachmentBar: {
+    minHeight: 64,
+    borderWidth: 1,
+    borderRadius: 16,
+    padding: spacing.md,
+    marginTop: spacing.md,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: spacing.md,
+  },
+  attachmentCopy: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.md,
+  },
+  attachmentTextWrap: {
+    flex: 1,
+  },
+  attachmentTitle: {
+    ...typography.label,
+  },
+  attachmentText: {
+    ...typography.caption,
+    marginTop: 2,
+  },
+  clearAttachment: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   metaText: {
     ...typography.caption,
