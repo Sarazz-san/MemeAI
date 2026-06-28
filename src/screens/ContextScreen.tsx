@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   ActivityIndicator,
   Pressable,
@@ -46,18 +46,20 @@ export function ContextScreen() {
   const [error, setError] = useState<string | null>(null);
   const [fileAttachment, setFileAttachment] = useState<AttachmentInfo | null>(null);
 
-  // Audio Recorder State
-  const audioRecorderPlayer = AudioRecorderPlayer;
+  // Audio Recorder State — v3 exports a class; create a stable instance via useRef
+  const audioRecorderPlayerRef = useRef(new AudioRecorderPlayer());
+  const audioRecorderPlayer = audioRecorderPlayerRef.current;
   const [recording, setRecording] = useState(false);
   const [recordTime, setRecordTime] = useState('00:00:00');
 
   useEffect(() => {
+    const player = audioRecorderPlayerRef.current;
     return () => {
       // Clean up player on unmount
-      audioRecorderPlayer.stopRecorder().catch(() => {});
-      audioRecorderPlayer.removeRecordBackListener();
+      player.stopRecorder().catch(() => {});
+      player.removeRecordBackListener();
     };
-  }, [audioRecorderPlayer]);
+  }, []);
 
   async function requestAudioPermission() {
     if (Platform.OS !== 'android') {
