@@ -52,6 +52,9 @@ jobs:
           echo "MEMEAI_UPLOAD_STORE_PASSWORD=$STORE_PASSWORD" >> android/gradle.properties
           echo "MEMEAI_UPLOAD_KEY_PASSWORD=$KEY_PASSWORD" >> android/gradle.properties
 
+      - name: Grant execute permission for gradlew
+        run: chmod +x android/gradlew
+
       - name: Build Debug APK
         run: |
           cd android
