@@ -140,8 +140,8 @@ Une tache est terminee seulement si :
 - [x] Theme local.
 - [x] Service API centralise dans `src/services/api.ts`.
 - [x] Types partages pour les reponses backend.
-- [ ] Gestion d'etats `idle/loading/success/error`.
-- [ ] Gestion permissions Android.
+- [x] Gestion d'etats `idle/loading/success/error` → implemente dans ContextScreen (loading, result, error, helper).
+- [x] Gestion permissions Android → PermissionsAndroid.request dans ContextScreen (camera, micro).
 
 Structure cible :
 
@@ -190,11 +190,11 @@ GET  /health
 
 ### 2.3 IA gratuite
 
-- [ ] Creer une cle API sur Google AI Studio en utilisant l'offre gratuite disponible.
-- [ ] Stocker la cle uniquement dans `backend/.env`.
-- [ ] Ne jamais placer la cle dans React Native.
-- [ ] Prevoir un fallback si le quota gratuit est atteint.
-- [ ] Documenter les limites : quota, latence, erreurs possibles.
+- [x] Creer une cle API sur Google AI Studio en utilisant l'offre gratuite disponible.
+- [x] Stocker la cle uniquement dans `backend/.env`.
+- [x] Ne jamais placer la cle dans React Native.
+- [x] Prevoir un fallback si le quota gratuit est atteint → `ALLOW_MOCK_AI=true` dans backend/.env.
+- [x] Documenter les limites : quota, latence, erreurs possibles → tableau dans README.md.
 
 Fichier `.env.example` :
 
@@ -265,7 +265,7 @@ Validation UI :
 
 - [x] Creer `backend/package.json`.
 - [x] Installer uniquement des dependances gratuites/open source dans le manifeste.
-- [ ] Ajouter script dev :
+- [x] Ajouter script dev :
 
 ```json
 {
