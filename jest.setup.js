@@ -13,13 +13,16 @@ jest.mock('react-native-image-picker', () => ({
   launchImageLibrary: jest.fn(),
 }));
 
-jest.mock('react-native-document-picker', () => ({
+jest.mock('@react-native-documents/picker', () => ({
   types: {
     images: 'images',
     audio: 'audio',
   },
-  pickSingle: jest.fn(),
-  isCancel: jest.fn(),
+  errorCodes: {
+    OPERATION_CANCELED: 'OPERATION_CANCELED',
+  },
+  isErrorWithCode: jest.fn((err) => err && typeof err === 'object' && 'code' in err),
+  pick: jest.fn(),
 }));
 
 jest.mock('react-native-view-shot', () => ({

@@ -22,7 +22,7 @@ import {useAppTheme} from '../theme/ThemeProvider';
 import {rainbow, spacing, typography} from '../theme/theme';
 import type {GeneratedMeme} from '../types/meme';
 import {launchCamera} from 'react-native-image-picker';
-import DocumentPicker from 'react-native-document-picker';
+import {pick, types, errorCodes, isErrorWithCode} from '@react-native-documents/picker';
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 
 const MAX_LENGTH = 700;
@@ -181,20 +181,24 @@ export function ContextScreen() {
     setResult(null);
     setError(null);
     try {
-      const res = await DocumentPicker.pickSingle({
-        type: [DocumentPicker.types.images, DocumentPicker.types.audio],
+      const results = await pick({
+        type: [types.images, types.audio],
+        allowMultiSelection: false,
       });
-      if (res.uri) {
-        setFileAttachment({
-          uri: res.uri,
-          name: res.name || 'fichier_importe',
-          type: res.type || 'application/octet-stream',
-          mode: 'import',
-        });
-        setHelper(`Fichier importé : ${res.name}. Prêt à générer.`);
+      if (results && results.length > 0) {
+        const res = results[0];
+        if (res.uri) {
+          setFileAttachment({
+            uri: res.uri,
+            name: res.name || 'fichier_importe',
+            type: res.type || 'application/octet-stream',
+            mode: 'import',
+          });
+          setHelper(`Fichier importé : ${res.name}. Prêt à générer.`);
+        }
       }
     } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
+      if (isErrorWithCode(err) && err.code === errorCodes.OPERATION_CANCELED) {
         return;
       }
       setError(`Erreur d'importation: ${err instanceof Error ? err.message : String(err)}`);
