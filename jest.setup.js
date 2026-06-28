@@ -13,15 +13,12 @@ jest.mock('react-native-image-picker', () => ({
   launchImageLibrary: jest.fn(),
 }));
 
-jest.mock('@react-native-documents/picker', () => ({
+jest.mock('react-native-document-picker', () => ({
   types: {
     images: 'images',
     audio: 'audio',
   },
-  errorCodes: {
-    OPERATION_CANCELED: 'OPERATION_CANCELED',
-  },
-  isErrorWithCode: jest.fn((err) => err && typeof err === 'object' && 'code' in err),
+  isCancel: jest.fn(() => false),
   pick: jest.fn(),
 }));
 
@@ -30,13 +27,13 @@ jest.mock('react-native-view-shot', () => ({
 }));
 
 jest.mock('react-native-audio-recorder-player', () => {
-  return {
-    default: {
-      startRecorder: jest.fn(),
-      stopRecorder: jest.fn(),
-      addRecordBackListener: jest.fn(),
-      removeRecordBackListener: jest.fn(),
-      mmssss: jest.fn(() => '00:00:00'),
-    },
-  };
+  // v3 exports a class constructor
+  const MockPlayer = jest.fn().mockImplementation(() => ({
+    startRecorder: jest.fn(() => Promise.resolve('/tmp/recording.mp4')),
+    stopRecorder: jest.fn(() => Promise.resolve('/tmp/recording.mp4')),
+    addRecordBackListener: jest.fn(),
+    removeRecordBackListener: jest.fn(),
+    mmssss: jest.fn(() => '00:00:00'),
+  }));
+  return MockPlayer;
 });

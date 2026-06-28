@@ -22,7 +22,7 @@ import {useAppTheme} from '../theme/ThemeProvider';
 import {rainbow, spacing, typography} from '../theme/theme';
 import type {GeneratedMeme} from '../types/meme';
 import {launchCamera} from 'react-native-image-picker';
-import {pick, types, errorCodes, isErrorWithCode} from '@react-native-documents/picker';
+import {pick, types, isCancel} from 'react-native-document-picker';
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 
 const MAX_LENGTH = 700;
@@ -200,7 +200,7 @@ export function ContextScreen() {
         }
       }
     } catch (err) {
-      if (isErrorWithCode(err) && err.code === errorCodes.OPERATION_CANCELED) {
+      if (isCancel(err)) {
         return;
       }
       setError(`Erreur d'importation: ${err instanceof Error ? err.message : String(err)}`);
