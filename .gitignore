@@ -41,6 +41,8 @@ android/app/memeai-release-key.keystore
 node_modules/
 npm-debug.log
 yarn-error.log
+build-debug.log
+build-release.log
 .env
 *.env
 
