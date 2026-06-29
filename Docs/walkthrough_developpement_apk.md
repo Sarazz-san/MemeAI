@@ -140,8 +140,8 @@ Une tache est terminee seulement si :
 - [x] Theme local.
 - [x] Service API centralise dans `src/services/api.ts`.
 - [x] Types partages pour les reponses backend.
-- [ ] Gestion d'etats `idle/loading/success/error`.
-- [ ] Gestion permissions Android.
+- [x] Gestion d'etats `idle/loading/success/error` → implemente dans ContextScreen (loading, result, error, helper).
+- [x] Gestion permissions Android → PermissionsAndroid.request dans ContextScreen (camera, micro).
 
 Structure cible :
 
@@ -190,11 +190,11 @@ GET  /health
 
 ### 2.3 IA gratuite
 
-- [ ] Creer une cle API sur Google AI Studio en utilisant l'offre gratuite disponible.
-- [ ] Stocker la cle uniquement dans `backend/.env`.
-- [ ] Ne jamais placer la cle dans React Native.
-- [ ] Prevoir un fallback si le quota gratuit est atteint.
-- [ ] Documenter les limites : quota, latence, erreurs possibles.
+- [x] Creer une cle API sur Google AI Studio en utilisant l'offre gratuite disponible.
+- [x] Stocker la cle uniquement dans `backend/.env`.
+- [x] Ne jamais placer la cle dans React Native.
+- [x] Prevoir un fallback si le quota gratuit est atteint → `ALLOW_MOCK_AI=true` dans backend/.env.
+- [x] Documenter les limites : quota, latence, erreurs possibles → tableau dans README.md.
 
 Fichier `.env.example` :
 
@@ -265,7 +265,7 @@ Validation UI :
 
 - [x] Creer `backend/package.json`.
 - [x] Installer uniquement des dependances gratuites/open source dans le manifeste.
-- [ ] Ajouter script dev :
+- [x] Ajouter script dev :
 
 ```json
 {
@@ -495,12 +495,12 @@ Version gratuite et realiste pour le TP :
 
 ### 10.1 Pre-release
 
-- [ ] Verifier nom app dans `android/app/src/main/res/values/strings.xml`.
-- [ ] Verifier icon app.
-- [ ] Verifier versionName/versionCode dans `android/app/build.gradle`.
-- [ ] Verifier aucune cle API dans le frontend.
-- [ ] Verifier backend URL de production ou LAN selon demo.
-- [ ] Lancer :
+- [x] Verifier nom app dans `android/app/src/main/res/values/strings.xml` → `MemeAI`.
+- [x] Verifier icon app → icone personnalisee MemeAI generee.
+- [x] Verifier versionName/versionCode dans `android/app/build.gradle` → `1.0` / `1`.
+- [x] Verifier aucune cle API dans le frontend → cle uniquement dans `backend/.env`.
+- [x] Verifier backend URL de production ou LAN selon demo → configurable depuis Settings.
+- [x] Lancer :
 
 ```sh
 npm run verify
@@ -514,10 +514,10 @@ Creer une cle release localement avec `keytool` inclus avec Java/JDK :
 keytool -genkeypair -v -storetype PKCS12 -keystore android/app/memeai-release-key.keystore -alias memeai -keyalg RSA -keysize 2048 -validity 10000
 ```
 
-- [ ] Ne pas commit le fichier `.keystore`.
-- [ ] Ne pas publier les mots de passe.
-- [ ] Ajouter les infos sensibles dans `android/gradle.properties` local ou variables d'environnement.
-- [ ] Ajouter un exemple documente sans secret.
+- [x] Ne pas commit le fichier `.keystore` → exclu via `.gitignore`.
+- [x] Ne pas publier les mots de passe → retires de `gradle.properties`, injectes par CI via secrets.
+- [x] Ajouter les infos sensibles dans `android/gradle.properties` local ou variables d'environnement.
+- [x] Ajouter un exemple documente sans secret → `android/gradle.properties.example`.
 
 ### 10.3 Configuration Gradle
 
@@ -595,12 +595,12 @@ Utiliser cette section apres chaque session.
 
 ### Session 2
 
-- [ ] Date :
-- [ ] Objectif :
-- [ ] Fait :
-- [ ] Bloquants :
-- [ ] Tests lances :
-- [ ] Commit :
+- [x] Date : 2026-06-28
+- [x] Objectif : Finaliser la securite de la release, cocher les items pre-release et pousser pour declencher le build CI.
+- [x] Fait : Verifie strings.xml (MemeAI), versionName 1.0, versionCode 1, aucune cle API dans le frontend. Retire les mots de passe de gradle.properties (ils etaient en clair). Cree gradle.properties.example. Ameliore le workflow CI (ajout chmod +x gradlew). npm run verify passe (0 erreurs, 7 warnings benignes).
+- [x] Bloquants : Aucun.
+- [x] Tests lances : npm run verify (passed).
+- [x] Commit : feat: prepare android release build and secure signing config
 
 ### Session 3
 

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   ActivityIndicator,
   Pressable,
@@ -22,7 +22,7 @@ import {useAppTheme} from '../theme/ThemeProvider';
 import {rainbow, spacing, typography} from '../theme/theme';
 import type {GeneratedMeme} from '../types/meme';
 import {launchCamera} from 'react-native-image-picker';
-import {pick, types, errorCodes, isErrorWithCode} from '@react-native-documents/picker';
+import {pick, types, isCancel} from 'react-native-document-picker';
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 
 const MAX_LENGTH = 700;
@@ -46,18 +46,20 @@ export function ContextScreen() {
   const [error, setError] = useState<string | null>(null);
   const [fileAttachment, setFileAttachment] = useState<AttachmentInfo | null>(null);
 
-  // Audio Recorder State
-  const audioRecorderPlayer = AudioRecorderPlayer;
+  // Audio Recorder State — v3 exports a class; create a stable instance via useRef
+  const audioRecorderPlayerRef = useRef(new AudioRecorderPlayer());
+  const audioRecorderPlayer = audioRecorderPlayerRef.current;
   const [recording, setRecording] = useState(false);
   const [recordTime, setRecordTime] = useState('00:00:00');
 
   useEffect(() => {
+    const player = audioRecorderPlayerRef.current;
     return () => {
       // Clean up player on unmount
-      audioRecorderPlayer.stopRecorder().catch(() => {});
-      audioRecorderPlayer.removeRecordBackListener();
+      player.stopRecorder().catch(() => {});
+      player.removeRecordBackListener();
     };
-  }, [audioRecorderPlayer]);
+  }, []);
 
   async function requestAudioPermission() {
     if (Platform.OS !== 'android') {
@@ -198,7 +200,7 @@ export function ContextScreen() {
         }
       }
     } catch (err) {
-      if (isErrorWithCode(err) && err.code === errorCodes.OPERATION_CANCELED) {
+      if (isCancel(err)) {
         return;
       }
       setError(`Erreur d'importation: ${err instanceof Error ? err.message : String(err)}`);
